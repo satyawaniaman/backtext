@@ -1,9 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import { db } from "@/server/db";
-
+import { loginSchema } from "@/schema/auth";
+import { ZodError } from "zod";
+import { type JWT } from "next-auth/jwt";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -25,6 +28,12 @@ declare module "next-auth" {
   // }
 }
 
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+  }
+}
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -32,25 +41,93 @@ declare module "next-auth" {
  */
 export const authConfig = {
   providers: [
-    DiscordProvider,
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
-  ],
-  adapter: PrismaAdapter(db),
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: {},
+        password: {},
+      },
+      async authorize(credentials) {
+        try {
+          const { email, password } = await loginSchema.parseAsync(credentials);
+
+          // Check if user exists
+          let user = await db.user.findUnique({
+            where: {
+              email: email,
+            },
+          });
+
+          if (user) {
+            // Existing user - verify password
+            if (!user.password) {
+              return null;
+            }
+
+            if (!user.password) {
+              return null;
+            }
+            
+            const validPassword = await bcrypt.compare(
+              password,
+              user.password as string,
+            );
+
+            if (!validPassword) {
+              return null;
+            }
+          } else {
+            // New user - create account
+            const hashedPassword = await bcrypt.hash(password, 12);
+            
+            user = await db.user.create({
+              data: {
+                email: email,
+                password: hashedPassword,
+                name: email.split('@')[0], // Use email prefix as default name
+              },
+            });
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return null;
+          }
+          console.error('Auth error:', error);
+        }
+        return null;
       },
     }),
+  ],
+  adapter: PrismaAdapter(db),
+  pages: {
+    signIn: "/signin",
+  },
+  secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id!;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
   },
 } satisfies NextAuthConfig;
