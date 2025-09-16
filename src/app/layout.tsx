@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Urbanist } from "next/font/google";
 import { Providers } from "@/components/providers";
-
+import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   title: "Backtext",
   description:
@@ -22,6 +22,7 @@ export default function RootLayout({
       <body>
         <Providers>{children}</Providers>
       </body>
+      <Analytics />
     </html>
   );
 }
