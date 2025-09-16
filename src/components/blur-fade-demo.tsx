@@ -1,28 +1,61 @@
 import { BlurFade } from "@/components/ui/blur-fade";
 import Image from "next/image";
 
-const images = [
-  "/image-1.jpeg",
-  "/image-3.jpeg",
-  "/image-2.jpeg",
-  "/image-4.jpeg",
-];
-
 export function BlurFadeDemo() {
   return (
     <section id="photos">
       <div className="columns-2 gap-4 sm:columns-2">
-        {images.map((imageUrl, idx) => (
-          <BlurFade key={imageUrl} delay={0.25 + idx * 0.05} inView>
+        {/* Landscape 1 */}
+        <BlurFade delay={0.25} inView>
+          <div className="mb-4 w-full overflow-hidden rounded-lg">
             <Image
-              className="mb-4 size-full rounded-lg object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-              src={imageUrl}
-              alt={`Demo image ${idx + 1}`}
+              src="/image-1.jpeg"
+              alt="Landscape 1"
+              width={800}
+              height={600}
+              className="w-full rounded-lg object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+            />
+          </div>
+        </BlurFade>
+
+        {/* Portrait 1 */}
+        <BlurFade delay={0.3} inView>
+          <div className="mb-4 w-full overflow-hidden rounded-lg">
+            <Image
+              src="/image-3.jpeg"
+              alt="Portrait 1"
               width={600}
               height={800}
+              className="w-full rounded-lg object-cover transition-transform duration-300 ease-in-out hover:scale-105"
             />
-          </BlurFade>
-        ))}
+          </div>
+        </BlurFade>
+
+        {/* Portrait 2 */}
+        <BlurFade delay={0.35} inView>
+          <div className="mb-4 w-full overflow-hidden rounded-lg">
+            <Image
+              src="/image-2.jpeg"
+              alt="Portrait 2"
+              width={600}
+              height={800}
+              className="w-full rounded-lg object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+            />
+          </div>
+        </BlurFade>
+
+        {/* Landscape 2 */}
+        <BlurFade delay={0.4} inView>
+          <div className="mb-4 w-full overflow-hidden rounded-lg">
+            <Image
+              src="/image-4.jpeg"
+              alt="Landscape 2"
+              width={800}
+              height={600}
+              className="w-full rounded-lg object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+            />
+          </div>
+        </BlurFade>
       </div>
     </section>
   );

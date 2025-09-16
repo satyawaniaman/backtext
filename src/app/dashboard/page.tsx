@@ -1,7 +1,9 @@
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/sign-out-button";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { db } from "@/server/db";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -9,58 +11,36 @@ export default async function DashboardPage() {
   if (!session) {
     redirect("/signin");
   }
-
+  const user = await db.user.findUnique({
+    where: {
+      id: session.user?.id,
+    },
+    select: {
+      credits: true,
+    },
+  });
   return (
     <main className="container mx-auto px-4 py-16">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col items-center gap-3 md:flex-row md:justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold">Dashboard</h1>
+            <h1 className="mb-2 hidden text-3xl font-bold md:block">
+              Dashboard
+            </h1>
             <p className="text-muted-foreground">
-              Welcome back, {session.user?.name ?? session.user?.email}!
+              Welcome back, {session.user?.name ?? session.user?.email}
             </p>
           </div>
-          <SignOutButton />
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div className="bg-card rounded-lg border p-6">
-            <h2 className="mb-2 text-lg font-semibold">Profile Information</h2>
-            <div className="space-y-2 text-sm">
-              <p>
-                <span className="font-medium">Name:</span>{" "}
-                {session.user?.name ?? "Not provided"}
-              </p>
-              <p>
-                <span className="font-medium">Email:</span>{" "}
-                {session.user?.email}
-              </p>
-              <p>
-                <span className="font-medium">User ID:</span> {session.user?.id}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-card rounded-lg border p-6">
-            <h2 className="mb-2 text-lg font-semibold">Quick Actions</h2>
-            <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
-                View Profile
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                Settings
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                Help & Support
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-card rounded-lg border p-6">
-            <h2 className="mb-2 text-lg font-semibold">Session Details</h2>
-            <div className="bg-muted max-h-32 overflow-auto rounded p-3 text-xs">
-              <pre>{JSON.stringify(session, null, 2)}</pre>
-            </div>
+          <div className="flex items-center space-x-2">
+            <Button variant="outline">
+              <span className="text-sm">
+                Credits Left: {user?.credits ?? 0}
+              </span>
+            </Button>
+            <Link href="/#pricing-section">
+              <Button variant="outline">Buy Credits</Button>
+            </Link>
+            <SignOutButton />
           </div>
         </div>
 

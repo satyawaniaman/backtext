@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import React from "react";
 import Image from "next/image";
 import BannerDemo from "@/components/banner-demo";
+import LoginButton from "./login-button";
 
 const menuItems = [
   { name: "Pricing", href: "/#pricing-section" },
   { name: "About", href: "/about" },
+  { name: "Dashboard", href: "/dashboard" },
 ];
 
 export const HeroHeader = () => {
@@ -71,11 +72,7 @@ export const HeroHeader = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <Button asChild size="sm">
-                  <Link href="/signin">
-                    <span>Login</span>
-                  </Link>
-                </Button>
+                <LoginButton />
               </div>
             </div>
           </div>

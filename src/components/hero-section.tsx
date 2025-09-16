@@ -42,7 +42,7 @@ export default function HeroSection() {
               </BlurFade>
 
               {/* BlurFade Demo Layout */}
-              <div className="order-first ml-auto lg:absolute lg:top-0 lg:right-0 lg:order-last lg:w-1/2">
+              <div className="order-first mt-32 ml-auto lg:absolute lg:top-0 lg:right-0 lg:order-last lg:mt-0 lg:w-1/2">
                 <BlurFadeDemo />
               </div>
             </div>
