@@ -23,7 +23,6 @@ export default function AboutPage() {
           AI-powered background removal ensures your text blends seamlessly with
           your visuals — without requiring complex design tools.
         </p>
-
         <p className="mb-4 text-lg leading-relaxed">
           Our goal is to remove the friction from making professional-looking
           content. With Backtext you can upload any image, place your message

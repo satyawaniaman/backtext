@@ -51,7 +51,7 @@ export default function Pricing() {
               <div>
                 <h2 className="font-medium">Pro</h2>
                 <span className="my-3 block text-2xl font-semibold">
-                  $3 / mo
+                  $4 / mo
                 </span>
                 <p className="text-muted-foreground text-sm">Per account</p>
               </div>
@@ -68,7 +68,7 @@ export default function Pricing() {
 
               <ul className="mt-4 list-outside space-y-3 text-sm">
                 {[
-                  "Unlimited generations per account",
+                  "350 credits per account",
                   "Access to all 20+ fonts",
                   "Letter spacing control",
                   "3D tilt effects",

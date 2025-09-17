@@ -11,7 +11,7 @@ import { LineShadowText } from "./ui/line-shadow";
 
 export default function HeroSection() {
   return (
-    <>
+    <div className="relative min-h-screen w-full ">
       <HeroHeader />
       <main className="overflow-x-hidden">
         <section>
@@ -103,6 +103,6 @@ export default function HeroSection() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Urbanist } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   title: "Backtext",
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en" className={`${urbanist.variable} font-sans`}>
       <body>
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
       <Analytics />
     </html>

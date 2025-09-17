@@ -19,64 +19,19 @@ export default function LoginPage() {
     email?: string;
     password?: string;
   }>({});
-  const [showResetModal, setShowResetModal] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [isResetting, setIsResetting] = useState(false);
-  const [resetMessage, setResetMessage] = useState<string | null>(null);
+  // Reset password handled on /reset-password now
   const router = useRouter();
 
   const handleGoogleSignIn = async () => {
     try {
       setIsGoogleLoading(true);
       setError(null);
-      await signIn("google", {
-        callbackUrl: "/dashboard",
-        redirect: true,
-      });
-    } catch (error) {
-      console.error("Google sign in error:", error);
-      setError("Failed to sign in with Google. Please try again.");
+      await signIn("google", { callbackUrl: "/dashboard", redirect: true });
+    } catch (e) {
+      console.error("Google sign in error", e);
+      setError("Failed to sign in with Google.");
     } finally {
       setIsGoogleLoading(false);
-    }
-  };
-
-  const handlePasswordReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setIsResetting(true);
-      setResetMessage(null);
-
-      const response = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: resetEmail,
-          newPassword: newPassword,
-        }),
-      });
-
-      const data = await response.json() as { error?: string; message?: string };
-
-       if (response.ok) {
-         setResetMessage("Password reset successfully! You can now sign in with your new password.");
-         setTimeout(() => {
-           setShowResetModal(false);
-           setResetEmail("");
-           setNewPassword("");
-           setResetMessage(null);
-         }, 2000);
-       } else {
-         setResetMessage(data.error ?? "Failed to reset password");
-       }
-    } catch (error) {
-      console.error("Password reset error:", error);
-      setResetMessage("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsResetting(false);
     }
   };
 
@@ -85,42 +40,30 @@ export default function LoginPage() {
       setIsLoading(true);
       setError(null);
       setFieldErrors({});
-
       const email = formData.get("email") as string;
       const password = formData.get("password") as string;
-
-      // Validate form data
       try {
         loginSchema.parse({ email, password });
       } catch (validationError) {
         if (validationError instanceof ZodError) {
           const errors: { email?: string; password?: string } = {};
           validationError.errors.forEach((err) => {
-            if (err.path[0] === "email") {
-              errors.email = err.message;
-            } else if (err.path[0] === "password") {
-              errors.password = err.message;
-            }
+            if (err.path[0] === "email") errors.email = err.message;
+            if (err.path[0] === "password") errors.password = err.message;
           });
           setFieldErrors(errors);
           return;
         }
       }
-
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
+      const result = await signIn("credentials", { email, password, redirect: false });
       if (result?.error) {
-        setError("Invalid email or password. Please try again.");
+        setError("Invalid email or password.");
       } else if (result?.ok) {
         router.push("/dashboard");
       }
-    } catch (error) {
-      console.error("Credentials sign in error:", error);
-      setError("An unexpected error occurred. Please try again.");
+    } catch (e) {
+      console.error("Credentials sign in error", e);
+      setError("Unexpected error.");
     } finally {
       setIsLoading(false);
     }
@@ -220,14 +163,14 @@ export default function LoginPage() {
                 <Label htmlFor="password" className="text-sm">
                   Password
                 </Label>
-                <Button 
-                  variant="link" 
+                <Button
+                  asChild
+                  variant="link"
                   size="sm"
                   type="button"
-                  onClick={() => setShowResetModal(true)}
                   className="link intent-info variant-ghost text-sm"
                 >
-                  Forgot your Password ?
+                  <Link href="/reset-password">Forgot your Password?</Link>
                 </Button>
               </div>
               <Input
@@ -264,72 +207,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Password Reset Modal */}
-      {showResetModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
-            <form onSubmit={handlePasswordReset} className="space-y-4">
-              <div>
-                <Label htmlFor="reset-email">Email</Label>
-                <Input
-                  type="email"
-                  id="reset-email"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                  required
-                  disabled={isResetting}
-                  placeholder="Enter your email address"
-                />
-              </div>
-              <div>
-                <Label htmlFor="new-password">New Password</Label>
-                <Input
-                  type="password"
-                  id="new-password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                  disabled={isResetting}
-                  placeholder="Enter your new password"
-                  minLength={6}
-                />
-              </div>
-              {resetMessage && (
-                <p className={`text-sm ${
-                  resetMessage.includes("successfully") 
-                    ? "text-green-600" 
-                    : "text-red-600"
-                }`}>
-                  {resetMessage}
-                </p>
-              )}
-              <div className="flex gap-2">
-                <Button
-                  type="submit"
-                  disabled={isResetting}
-                  className="flex-1"
-                >
-                  {isResetting ? "Resetting..." : "Reset Password"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setShowResetModal(false);
-                    setResetEmail("");
-                    setNewPassword("");
-                    setResetMessage(null);
-                  }}
-                  disabled={isResetting}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Password reset handled via /reset-password */}
     </section>
   );
 }
