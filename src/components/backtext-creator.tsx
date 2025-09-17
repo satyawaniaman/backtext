@@ -4,22 +4,20 @@ import { useState } from "react";
 
 function BacktextCreator() {
   const [loading, setLoading] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string>("");
-  const [processedImageSrc, setProcessedImageSrc] = useState<string>("");
-  const [canvasReady, setCanvasReady] = useState(false);
+  // Future enhancement: preview/edit pipeline (currently placeholder to avoid unused warnings removed)
   const setSelectedImage = async (file?: File) => {
     if (file) {
       setLoading(true);
       const reader = new FileReader();
       reader.onload = async (e) => {
         const src = e.target?.result as string;
-        setImageSrc(src);
+  // set image src (future preview pipeline)
 
         // Your background removal logic here
         // const blob = await removeBackground(src);
         // const processedUrl = URL.createObjectURL(blob);
         // setProcessedImageSrc(processedUrl);
-        setCanvasReady(true);
+  // set canvas ready flag if needed in future
         setLoading(false);
       };
       reader.readAsDataURL(file);

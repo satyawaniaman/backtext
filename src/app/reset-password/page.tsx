@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,7 @@ enum ViewState {
   Done = "done",
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordInner() {
   const params = useSearchParams();
   const router = useRouter();
   const emailParam = params.get("email") ?? "";
@@ -93,8 +93,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-transparent">
-      <div className="w-full max-w-md rounded-lg border bg-white p-6 shadow-sm">
+    <div className="w-full max-w-md rounded-lg border bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold mb-2">Reset Password</h1>
         <p className="text-sm text-muted-foreground mb-6">
           {view === ViewState.Request && "Enter your email address to request a password reset."}
@@ -204,6 +203,15 @@ export default function ResetPasswordPage() {
           </div>
         )}
       </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-transparent">
+      <Suspense fallback={<div className="w-full max-w-md rounded-lg border bg-white p-6 shadow-sm text-sm text-muted-foreground">Loading...</div>}>
+        <ResetPasswordInner />
+      </Suspense>
     </main>
   );
 }

@@ -278,8 +278,7 @@ export const useFileUpload = (
       setState((prev) => {
         const fileToRemove = prev.files.find((file) => file.id === id)
         if (
-          fileToRemove &&
-          fileToRemove.preview &&
+          fileToRemove?.preview &&
           fileToRemove.file instanceof File &&
           fileToRemove.file.type.startsWith("image/")
         ) {
@@ -343,7 +342,10 @@ export const useFileUpload = (
         // In single file mode, only use the first file
         if (!multiple) {
           const file = e.dataTransfer.files[0]
-          addFiles([file])
+          // Guard: file could be undefined (TypeScript build complained). Only add if present.
+          if (file) {
+            addFiles([file])
+          }
         } else {
           addFiles(e.dataTransfer.files)
         }
@@ -373,8 +375,8 @@ export const useFileUpload = (
         ...props,
         type: "file" as const,
         onChange: handleFileChange,
-        accept: props.accept || accept,
-        multiple: props.multiple !== undefined ? props.multiple : multiple,
+        accept: props.accept ?? accept,
+        multiple: props.multiple ?? multiple,
         ref: inputRef,
       }
     },
@@ -409,5 +411,6 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 
   const i = Math.floor(Math.log(bytes) / Math.log(k))
 
-  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + sizes[i]
+  const sizeLabel = sizes[i] ?? "Bytes"
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + sizeLabel
 }
