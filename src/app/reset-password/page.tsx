@@ -48,7 +48,7 @@ function ResetPasswordInner() {
       });
       const data = (await res.json()) as { message?: string; error?: string; devToken?: string };
       if (res.ok) {
-        setMessage(data.message ?? "If that account exists, a reset email has been sent.");
+        setMessage(data.message ?? "Password reset token generated.");
         if (data.devToken) setDevToken(data.devToken);
         setView(ViewState.Complete); // Allow immediate token entry
       } else {
@@ -96,16 +96,16 @@ function ResetPasswordInner() {
     <div className="w-full max-w-md rounded-lg border bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold mb-2">Reset Password</h1>
         <p className="text-sm text-muted-foreground mb-6">
-          {view === ViewState.Request && "Enter your email address to request a password reset."}
-          {view === ViewState.Complete && "Enter the token sent to your email and choose a new password."}
+          {view === ViewState.Request && "Enter your email address to generate a password reset token."}
+          {view === ViewState.Complete && "Enter the token and choose a new password."}
           {view === ViewState.Done && "Your password has been updated."}
         </p>
 
         {error && <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
         {message && <div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-700">{message}</div>}
         {devToken && view !== ViewState.Done && (
-          <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-2 text-xs text-amber-700">
-            Dev token: {devToken}
+          <div className="mb-4 rounded-md border border-green-200 bg-green-50 p-2 text-xs text-green-700">
+            Reset token: {devToken}
           </div>
         )}
 

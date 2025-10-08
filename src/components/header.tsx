@@ -7,7 +7,6 @@ import BannerDemo from "@/components/banner-demo";
 import LoginButton from "./login-button";
 
 const menuItems = [
-  { name: "Pricing", href: "/#pricing-section" },
   { name: "About", href: "/about" },
   { name: "Dashboard", href: "/dashboard" },
 ];

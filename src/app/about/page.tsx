@@ -32,16 +32,13 @@ export default function AboutPage() {
 
         <p className="mb-4 text-lg leading-relaxed">
           Key features include background removal, flexible text positioning,
-          tilt, multiple font options, and one-click export. Every new account
-          starts with <strong>3 free credits</strong> so you can try it out.
-          When you’re ready for unlimited creation, simply upgrade to our
-          affordable
-          <strong> $3 plan</strong> — no hidden fees.
+          tilt, multiple font options, and one-click export. The application is
+          completely free to use with no limitations or hidden fees.
         </p>
 
         <p className="mb-4 text-lg leading-relaxed">
           Backtext is built with modern, production-grade technology: Next.js,
-          React, Tailwind CSS, shadcn/ui, Stripe, AWS S3, and OpenAI. This stack
+          React, Tailwind CSS, shadcn/ui, AWS S3, and OpenAI. This stack
           ensures speed, scalability, and secure handling of your designs.
         </p>
 

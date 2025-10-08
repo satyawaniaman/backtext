@@ -24,8 +24,6 @@ export default async function AccountPage() {
       id: true,
       email: true,
       name: true,
-      credits: true,
-      plan: true,
     },
   });
 

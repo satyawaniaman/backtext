@@ -50,8 +50,6 @@ model User {
     password      String?
     emailVerified DateTime?
     image         String?
-    credits       Int       @default(3)
-    plan          String    @default("free")
     accounts      Account[]
     sessions      Session[]
 }

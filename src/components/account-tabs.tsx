@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+
 import { signOut } from "next-auth/react";
 import { AlertTriangle, ArrowLeft, LogOut, Shield, User } from "lucide-react";
 import {
@@ -28,13 +28,12 @@ import {
 import { toast } from "sonner";
 import { SignOutButton } from "./sign-out-button";
 import Link from "next/link";
+import { UpdatePasswordForm } from "./update-password-form";
 
 interface User {
   id: string;
   email: string | null;
   name: string | null;
-  credits: number;
-  plan: string;
 }
 
 interface AccountTabsProps {
@@ -94,9 +93,8 @@ export function AccountTabs({ user }: AccountTabsProps) {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="subscription">Subscription</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
 
@@ -109,7 +107,7 @@ export function AccountTabs({ user }: AccountTabsProps) {
                 User Details
               </CardTitle>
               <CardDescription>
-                Your account information and current plan details.
+                Your account information and details.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -124,19 +122,6 @@ export function AccountTabs({ user }: AccountTabsProps) {
                   <Label className="text-sm font-medium">Email</Label>
                   <p className="text-muted-foreground text-sm">
                     {user.email ?? "Not provided"}
-                  </p>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">Current Plan</Label>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary">{user.plan}</Badge>
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">Credits</Label>
-                  <p className="text-muted-foreground text-sm flex items-center gap-2">
-                    {user.credits} remaining
-                    <Link href="/buy-credits" className="underline text-xs">Buy more</Link>
                   </p>
                 </div>
               </div>
@@ -159,23 +144,8 @@ export function AccountTabs({ user }: AccountTabsProps) {
             </CardContent>
           </Card>
 
-          {/* Password Reset Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                Reset Password
-              </CardTitle>
-              <CardDescription>
-                Reset your account password.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/reset-password">
-                <Button variant="outline">Reset Password</Button>
-              </Link>
-            </CardContent>
-          </Card>
+          {/* Password Update Card */}
+          <UpdatePasswordForm />
 
           {/* Danger Zone Card */}
           <Card className="border-destructive">
@@ -220,20 +190,6 @@ export function AccountTabs({ user }: AccountTabsProps) {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="subscription" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Subscription</CardTitle>
-              <CardDescription>
-                Manage your subscription and billing information.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Coming soon...</p>
             </CardContent>
           </Card>
         </TabsContent>

@@ -125,7 +125,7 @@ export default function DropImage({ onFileSelect }: DropImageProps) {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             data-dragging={isDragging || undefined}
-            className="data-[dragging=true]:bg-accent/50 relative flex min-h-80 w-full flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 p-6 transition-all duration-300 hover:border-gray-400 hover:bg-gray-50 has-[input:focus]:ring-2 has-[input:focus]:ring-blue-500"
+            className="data-[dragging=true]:bg-accent/50 bg-foreground/70 border-foreground/20 hover:border-foreground/40 relative flex min-h-80 w-full flex-col items-center justify-center overflow-hidden rounded-xl border-2 p-6 ring-offset-2 transition-all duration-300 hover:shadow-lg has-[input:focus]:ring-2"
           >
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div
@@ -135,7 +135,7 @@ export default function DropImage({ onFileSelect }: DropImageProps) {
                 <ImageIcon className="size-6 opacity-60" />
               </div>
               <p className="mb-2 text-lg font-medium">Drop your image here</p>
-              <p className="text-muted-foreground mb-4 text-sm">
+              <p className="mb-4 text-sm font-medium">
                 Any image file (max. {maxSizeMB}MB)
               </p>
               <Button

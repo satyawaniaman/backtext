@@ -82,12 +82,9 @@ export default function HeroSection() {
                     </div>
                   </div>
                   <div className="flex">
-                    <Image
-                      src="/stripe.svg"
-                      alt="Stripe"
-                      width={80}
-                      height={80}
-                    />
+                    <div style={{ width: 40, height: 40 }}>
+                      <StackIcon name="react" />
+                    </div>
                   </div>
                   <div className="flex">
                     <Image

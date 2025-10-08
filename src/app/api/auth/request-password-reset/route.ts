@@ -3,7 +3,6 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { rateLimit } from "@/server/rate-limit";
 import { createPasswordResetToken } from "@/server/security/password-reset";
-import { sendPasswordResetEmail } from "@/server/email/send-password-reset";
 
 // Input schema
 const schema = z.object({
@@ -43,23 +42,16 @@ export async function POST(req: NextRequest) {
 
     if (user) {
       const { token, expires } = await createPasswordResetToken({ email });
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "http://localhost:3000";
-      await sendPasswordResetEmail({
-        to: email,
-        token,
-        baseUrl,
-        expiresAt: expires,
-      });
       return NextResponse.json({
-        message: "If that account exists, a reset email has been sent. If you requested a reset, check your inbox.",
-        devToken: process.env.NODE_ENV !== "production" ? token : undefined,
+        message: "Password reset token generated. Use this token to reset your password.",
+        devToken: token, // Always return token since we're not using email
         expiresAt: expires.toISOString(),
       });
     }
 
     // Always return generic response for non-existent user
     return NextResponse.json({
-      message: "If that account exists, a reset email has been sent.",
+      message: "User not found. Please check your email address.",
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
