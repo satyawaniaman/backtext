@@ -1,29 +1,76 @@
-# Create T3 App
+# BackText
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+AI-powered background removal with custom text overlays. Upload an image, remove the background automatically, and add stylized text with full customization options.
 
-## What's next? How do I make an app with this?
+🌐 **Live App**: [https://backtext.fun](https://backtext.fun)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **AI Background Removal**: Automatic background removal using advanced AI
+- **Custom Text Overlays**: Add text with multiple font options
+- **Full Customization**: Adjust position, size, color, and opacity
+- **Real-time Preview**: See changes instantly on the canvas
+- **High-Quality Export**: Download your edited images
+- **Responsive Design**: Works on desktop and mobile devices
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- Node.js 18+ 
+- pnpm (recommended) or npm
+- PostgreSQL database
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Environment Setup
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. Clone the repository
+2. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
 
-## How do I deploy this?
+3. Fill in your environment variables:
+   ```env
+   # Authentication
+   AUTH_SECRET="your-auth-secret"
+   GOOGLE_CLIENT_ID="your-google-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+   
+   # Database
+   DATABASE_URL="postgresql://username:password@localhost:5432/backtext"
+   
+   # App URL
+   NEXT_PUBLIC_APP_URL="http://localhost:3000"
+   ```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Installation & Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Set up the database
+pnpm db:push
+
+# Start development server
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+## Tech Stack
+
+- **Framework**: Next.js 14
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Prisma
+- **Authentication**: NextAuth.js
+- **AI Processing**: @imgly/background-removal
+- **UI Components**: Radix UI
+
+## Deployment
+
+The app is optimized for deployment on Vercel, Netlify, or any Node.js hosting platform.
+
+## License
+
+MIT License
