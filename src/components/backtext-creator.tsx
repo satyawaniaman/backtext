@@ -5,6 +5,7 @@ import { removeBackground } from "@imgly/background-removal";
 import { Button } from "./ui/button";
 import PuffLoader from "react-spinners/PuffLoader";
 import { IoMdArrowBack } from "react-icons/io";
+import { Slider } from "@/components/ui/slider"
 import {
   Card,
   CardContent,
@@ -360,16 +361,16 @@ const BacktextCreator = () => {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <Label htmlFor="text-opacity">Text Opacity (%)</Label>
-                      <Input
-                        id="text-opacity"
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={textOpacity}
-                        onChange={(e) => setTextOpacity(Number(e.target.value))}
-                        className="w-full"
-                      />
-                      <div className="text-sm text-muted-foreground text-center">
+                      <Slider
+        id="text-opacity"
+        min={0}
+        max={100}
+        step={1}
+        value={[textOpacity]}
+        onValueChange={(val: number[]) => setTextOpacity(val[0] ?? 100)}
+        className="w-full"
+      />
+                      <div className="text-sm text-black text-center">
                         {textOpacity}%
                       </div>
                     </div>
