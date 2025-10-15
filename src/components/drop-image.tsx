@@ -1,176 +1,69 @@
-"use client";
-
-import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
-import { useFileUpload } from "@/hooks/use-file-upload";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-
-interface DropImageProps {
-  onFileSelect?: (file: File | null) => void;
-}
-
-export default function DropImage({ onFileSelect }: DropImageProps) {
-  const maxSizeMB = 5;
-  const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
-
-  const [
-    { files, isDragging, errors },
-    {
-      handleDragEnter,
-      handleDragLeave,
-      handleDragOver,
-      handleDrop,
-      openFileDialog,
-      removeFile,
-      getInputProps,
-    },
-  ] = useFileUpload({
-    accept: "image/*",
-    maxSize,
-  });
-
-  const previewUrl = files[0]?.preview ?? null;
-  const fileName = files[0]?.file.name ?? null;
-  const selectedFile = files[0]?.file ?? null;
-
-  // Natural size for intrinsic rendering (no extra container space)
-  const [naturalSize, setNaturalSize] = useState<{
-    w: number;
-    h: number;
-  } | null>(null);
-  useEffect(() => {
-    if (!previewUrl) {
-      setNaturalSize(null);
-      return;
-    }
-    const img = new window.Image();
-    img.src = previewUrl;
-    img.onload = () => {
-      setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
-    };
-    return () => {
-      setNaturalSize(null);
-    };
-  }, [previewUrl]);
-
-  // Compute display size: if portrait, limit to within 500x500; landscape remains natural
-  const displaySize = useMemo(() => {
-    if (!naturalSize) return null;
-    const { w, h } = naturalSize;
-    // Portrait (or square) handling: fit within 500x500 without upscaling
-    if (h >= w) {
-      const maxSide = Math.max(w, h);
-      if (maxSide > 500) {
-        const scale = 500 / maxSide;
-        return { w: Math.round(w * scale), h: Math.round(h * scale) };
-      }
-    }
-    // Landscape or already small portrait: keep natural size
-    return { w, h };
-  }, [naturalSize]);
-
-  // Call onFileSelect whenever the selected file changes
-  useEffect(() => {
-    onFileSelect?.(selectedFile instanceof File ? selectedFile : null);
-  }, [selectedFile, onFileSelect]);
-
-  const handleRemoveFile = () => {
-    if (files[0]?.id) {
-      removeFile(files[0].id);
-      onFileSelect?.(null);
-    }
-  };
-
+const Dropzone = ({
+  setSelectedImage,
+}: {
+  setSelectedImage: (file?: File) => void;
+}) => {
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
-      <div className="relative">
-        <input
-          {...getInputProps()}
-          className="sr-only"
-          aria-label="Upload image file"
-        />
-
-        {/* Preview or Dropzone */}
-        {previewUrl && displaySize ? (
-          <div
-            className="relative mx-auto w-fit"
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-          >
-            <Image
-              src={previewUrl}
-              alt={files[0]?.file?.name ?? "Uploaded image"}
-              width={displaySize.w}
-              height={displaySize.h}
-              sizes="100vw"
-              className="h-auto max-w-full rounded-xl object-contain transition-transform duration-300 hover:scale-105"
-              priority
-            />
-            <button
-              type="button"
-              className="focus-visible:border-ring focus-visible:ring-ring/50 absolute top-2 right-2 z-10 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={handleRemoveFile}
-              aria-label="Remove image"
-            >
-              <XIcon className="size-4" aria-hidden="true" />
-            </button>
-          </div>
-        ) : (
-          <div
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            data-dragging={isDragging || undefined}
-            className="data-[dragging=true]:bg-accent/50 bg-foreground/70 border-foreground/20 hover:border-foreground/40 relative flex min-h-80 w-full flex-col items-center justify-center overflow-hidden rounded-xl border-2 p-6 ring-offset-2 transition-all duration-300 hover:shadow-lg has-[input:focus]:ring-2"
-          >
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div
-                className="bg-background mb-4 flex size-12 shrink-0 items-center justify-center rounded-full border shadow-sm"
-                aria-hidden="true"
-              >
-                <ImageIcon className="size-6 opacity-60" />
-              </div>
-              <p className="mb-2 text-lg font-medium">Drop your image here</p>
-              <p className="mb-4 text-sm font-medium">
-                Any image file (max. {maxSizeMB}MB)
-              </p>
-              <Button
-                variant="outline"
-                className="mt-2"
-                onClick={openFileDialog}
-              >
-                <UploadIcon
-                  className="-ms-1 size-4 opacity-60"
-                  aria-hidden="true"
-                />
-                Select image
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {errors.length > 0 && (
-        <div
-          className="text-destructive flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm"
-          role="alert"
+    <div className="mt-16">
+      <input
+        onChange={(e) => setSelectedImage(e.target.files?.[0])}
+        className="hidden"
+        type="file"
+        id="file-upload"
+        accept="image/*"
+      />
+      <label
+        htmlFor="file-upload"
+        className="relative flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border  px-10 py-10"
+      >
+        <div className="absolute inset-3 rounded-xl border border-dashed "></div>
+        <p>Upload file</p>
+        <svg
+          width="47"
+          height="47"
+          viewBox="0 0 47 47"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <AlertCircleIcon className="size-4 shrink-0" />
-          <span>{errors[0]}</span>
-        </div>
-      )}
-
-      {fileName && (
-        <div className="text-center">
-          <p className="text-muted-foreground text-sm break-all">
-            Uploaded: {fileName}
-          </p>
-        </div>
-      )}
+          <path
+            d="M41.125 23.5V37.2083C41.125 38.2471 40.7124 39.2433 39.9778 39.9778C39.2433 40.7124 38.2471 41.125 37.2083 41.125H9.79167C8.7529 41.125 7.75668 40.7124 7.02216 39.9778C6.28765 39.2433 5.875 38.2471 5.875 37.2083V9.79167C5.875 8.7529 6.28765 7.75668 7.02216 7.02216C7.75668 6.28765 8.7529 5.875 9.79167 5.875H23.5"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M31.3333 9.79167H43.0833"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M37.2083 3.91667V15.6667"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M17.625 21.5417C19.7881 21.5417 21.5417 19.7881 21.5417 17.625C21.5417 15.4619 19.7881 13.7083 17.625 13.7083C15.4619 13.7083 13.7083 15.4619 13.7083 17.625C13.7083 19.7881 15.4619 21.5417 17.625 21.5417Z"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M41.125 29.375L35.0816 23.3316C34.3471 22.5973 33.3511 22.1848 32.3125 22.1848C31.2739 22.1848 30.2779 22.5973 29.5434 23.3316L11.75 41.125"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </label>
     </div>
   );
-}
+};
+
+export default Dropzone;
