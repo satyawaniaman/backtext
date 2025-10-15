@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { inter, domine, playfairDisplay, lato, montserrat, poppins } from "../app/fonts";
+import { inter, domine, roboto, openSans, lato, montserrat, poppins, playfairDisplay } from "../app/fonts";
 import Dropzone from "./drop-image";
 
 const BacktextCreator = () => {
@@ -132,6 +132,12 @@ const BacktextCreator = () => {
           break;
         case "domine":
           selectFont = domine.style.fontFamily;
+          break;
+        case "roboto":
+          selectFont = roboto.style.fontFamily;
+          break;
+        case "openSans":
+          selectFont = openSans.style.fontFamily;
           break;
         case "lato":
           selectFont = lato.style.fontFamily;
@@ -283,6 +289,8 @@ const BacktextCreator = () => {
                           <SelectItem value="arial">Arial</SelectItem>
                           <SelectItem value="inter">Inter</SelectItem>
                           <SelectItem value="domine">Domine</SelectItem>
+                          <SelectItem value="roboto">Roboto</SelectItem>
+                          <SelectItem value="openSans">Open Sans</SelectItem>
                           <SelectItem value="lato">Lato</SelectItem>
                           <SelectItem value="montserrat">Montserrat</SelectItem>
                           <SelectItem value="poppins">Poppins</SelectItem>

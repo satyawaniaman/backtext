@@ -11,6 +11,7 @@ export const domine = Domine({
 })
 
 export const roboto = Roboto({
+  weight: ['400', '700'],
   subsets: ['latin'],
   display: 'swap',
 })
@@ -36,7 +37,6 @@ export const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
 })
-
 
 export const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
