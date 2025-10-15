@@ -24,7 +24,7 @@ import {
 import { inter, domine, playfairDisplay, lato, montserrat, poppins } from "../app/fonts";
 import Dropzone from "./drop-image";
 
-const BacktextCreator = ({ children }: { children: React.ReactNode }) => {
+const BacktextCreator = () => {
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -410,7 +410,7 @@ const BacktextCreator = ({ children }: { children: React.ReactNode }) => {
               <p className="text-red-700 text-sm">{error}</p>
             </div>
           )}
-          <div className="mt-8">{children}</div>
+
         </div>
       )}
     </>
