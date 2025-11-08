@@ -18,7 +18,7 @@ const links = [
 
 export default function FooterSection() {
   return (
-    <footer className="py-16 md:py-12 md:pt-44">
+    <footer className="py-8 md:py-12 md:pt-12">
       <div className="mx-auto max-w-5xl px-6">
         <Link href="/" aria-label="go home" className="mx-auto block size-fit">
           <Image src="/logo.svg" alt="BackText" width={100} height={100} />

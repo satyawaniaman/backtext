@@ -49,7 +49,7 @@ export default function HeroSection() {
           </div>
         </section>
         <section>
-          <div className="group relative m-auto max-w-6xl px-6">
+          {/* <div className="group relative m-auto max-w-6xl px-6">
             <div className="flex flex-col items-center md:flex-row">
               <div className="md:max-w-44 md:border-r md:pr-6">
                 <p className="text-end text-sm">built using</p>
@@ -97,7 +97,7 @@ export default function HeroSection() {
                 </InfiniteSlider>
               </div>
             </div>
-          </div>
+          </div> */}
         </section>
       </main>
     </div>
